@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "department" ALTER COLUMN "code" DROP DEFAULT,
+ALTER COLUMN "code" SET DATA TYPE TEXT;
