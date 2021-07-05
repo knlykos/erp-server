@@ -30,7 +30,7 @@ employeesRouter.post(
   "/create",
   authenticatorToken,
   async (req: Request, res: Response, next: NextFunction) => {
-    const employee: Prisma.employeeCreateInput = req.body.employee;
+    const employee: Prisma.EmployeeCreateInput = req.body.employee;
     const departmentId: number = req.body.departmentId;
     const user = req.user as JwtToken;
 
@@ -78,8 +78,9 @@ employeesRouter.get(
 employeesRouter.put(
   "/edit",
   async (req: Request, res: Response, next: NextFunction) => {
-    const employee: Prisma.employeeUpdateInput = req.body;
-    const id: number = Number(req.query.id);
+    const employee: Prisma.EmployeeCreateInput = req.body;
+    const id: number = req.body.id
+    console.log(req.body);
     const employeeController = new EmployeesController();
     try {
       const updatedemployee = await employeeController.update(employee, id);

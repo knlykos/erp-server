@@ -96,7 +96,7 @@ export class EmployeesController {
   }
 
   async create(
-    employee: Prisma.employeeCreateInput,
+    employee: Prisma.EmployeeCreateInput,
     departmentId: number,
     user: JwtToken
   ) {
@@ -110,7 +110,7 @@ export class EmployeesController {
     try {
       // const createdemployee = await getRepository(Employee).save(employee);
       const employeeCreated = await prisma.employee.create({
-        data: { ...employee, department: { connect: { id: departmentId } } },
+        data: { ...employee },
       });
       return employeeCreated;
     } catch (error) {
@@ -118,7 +118,7 @@ export class EmployeesController {
     }
   }
 
-  async update(employee: Prisma.employeeUpdateInput, employeeId: number) {
+  async update(employee: Prisma.EmployeeCreateInput, employeeId: number) {
     try {
       const updatedEmployee = await prisma.employee.update({
         data: employee,

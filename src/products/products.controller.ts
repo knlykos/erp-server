@@ -23,9 +23,10 @@ export class ProductsController {
 
   async findAll() {
     try {
-      const foundResult = await prisma.user.findMany();
+      const foundResult = await prisma.product.findMany();
       return foundResult;
     } catch (error) {
+      console.log(error, "error");
       throw new Error(error);
     }
   }
@@ -47,6 +48,19 @@ export class ProductsController {
         data: product,
       });
       return updatedProduct;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async saveImageName(id: number, image: string) {
+    try {
+      const updatedImage = await prisma.$queryRaw(
+        'update "Product" set image = $1 where id = $2;',
+        image,
+        id
+      );
+      return updatedImage;
     } catch (error) {
       throw new Error(error);
     }

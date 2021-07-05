@@ -12,8 +12,9 @@ var cors = require("cors");
 let indexRouter = require("./routes/index");
 let usersRouter = require("./src/users/users.routes");
 let employeesRouter = require("./src/employees/employees.routes");
-let departmentRouter = require("./src/departments/departments.routes");
-let shiftConfigRouter = require("./src/shift-config/shift-config.router");
+// let departmentRouter = require("./src/departments/departments.routes");
+// let shiftConfigRouter = require("./src/shift-config/shift-config.router");
+let productRouter = require("./src/products/products.router");
 var app = express();
 const prisma = new PrismaClient({
   log: [
@@ -38,46 +39,44 @@ const prisma = new PrismaClient({
 //   synchronize: true,
 // })
 //   .then((connection) => {
-    // console.log(connection.logger);
+// console.log(connection.logger);
 
-    app.set("views", path.join(__dirname, "views"));
-    app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-    app.use(cors());
-    app.use(logger("dev"));
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: false }));
-    app.use(cookieParser());
-    app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
-    // app.use("/", indexRouter);
-    app.use("/users", usersRouter);
-    app.use("/employees", employeesRouter);
-    app.use("/shift-config", shiftConfigRouter);
-    app.use("/departments", departmentRouter);
+// app.use("/", indexRouter);
+app.use("/users", usersRouter);
+app.use("/employees", employeesRouter);
+app.use("/products", productRouter);
+app.use("/uploads", express.static(__dirname + "\\uploads"));
+// app.use("/shift-config", shiftConfigRouter);
+// app.use("/departments", departmentRouter);
 
-    // catch 404 and forward to error handler
-    app.use(function (req: Request, res: Response, next: NextFunction) {
-      next(createError(404));
-    });
+// catch 404 and forward to error handler
+app.use(function (req: Request, res: Response, next: NextFunction) {
+  next(createError(404));
+});
 
-    // error handler
-    app.use(function (
-      err: any,
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ) {
-      // set locals, only providing error in development
-      res.locals.message = err.message;
-      res.locals.error = req.app.get("env") === "development" ? err : {};
+// error handler
+app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
+  // set locals, only providing error in development
+  console.log(err.message);
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
-      // render the error page
-      res.status(err.status || 500);
-      res.render("error");
-    });
-  // })
-  // .catch((error: any) => console.log(error));
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
+});
+// })
+// .catch((error: any) => console.log(error));
 // view engine setup
 
 module.exports = app;
