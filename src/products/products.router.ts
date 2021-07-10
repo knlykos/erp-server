@@ -81,7 +81,7 @@ productRouter.post(
 
     const productController = new ProductsController();
     try {
-      const imageUpdated = productController.saveImageName(
+      const imageUpdated = await productController.saveImageName(
         id,
         req.file.filename
       );
@@ -89,9 +89,6 @@ productRouter.post(
     } catch (error) {
       res.status(501).send(error.message);
     }
-    // console.log(`${__dirname}\\..\\..\\uploads`);
-    // console.log(req.file.filename);
-    // console.log(req.files);
   }
 );
 

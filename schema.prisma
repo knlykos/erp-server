@@ -3,25 +3,91 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model SaleOrder {
+  id             Int         @id @default(autoincrement())
+  orderReference String
+  partnerId      Int
+  orderDate      DateTime
+  orderLines     OrderLine[]
+  note           String      @db.Text
+  userId         Int
+
+}
+
+model OrderLine {
+  id              Int            @id @default(autoincrement())
+  salesOrderId    Int
+  purchaseOrderId Int
+  productId       Int
+  products        Product        @relation(fields: [productId], references: [id])
+  sales           SaleOrder?     @relation(fields: [salesOrderId], references: [id])
+  purchaseOrders  PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
+  quantity        Decimal        @db.Decimal(12, 2)
+}
+
+model PurchaseOrder {
+  id         Int         @id @default(autoincrement())
+  orderLines OrderLine[]
+}
+
+model Partner {
+  id         Int    @id @default(autoincrement())
+  name       String @db.VarChar(150)
+  street     String @db.VarChar(250)
+  zip        String @db.VarChar(10)
+  phone      String @db.VarChar(20)
+  mobile     String @db.VarChar(20)
+  email      String @db.VarChar(50)
+  website    String @db.VarChar(150)
+  ShippingId Int
+}
+
+model State {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(150)
+
+}
+
+// model PartnerAddress {
+//   id Int @id @default(autoincrement())
+
+// }
+
+model WherehouseMovement {
+  id            Int       @id @default(autoincrement())
+  date          DateTime
+  products      Product[]
+  serialNumber  String
+  movType       Int
+  from          Int
+  to            Int
+  done          Boolean
+  unitOfMessure Int
+  company       Int
+  status        Int
+}
+
 model Product {
-  id            Int        @id @default(autoincrement())
-  active        Boolean    @default(true)
-  name          String     @unique @default("")
-  code          String     @unique @default("")
-  description   String     @default("")
-  barcode       String     @unique @db.VarChar(20)
-  price         Decimal    @db.Decimal(12, 2)
-  cost          Decimal    @db.Decimal(12, 2)
-  image         String
-  canBeSold     Boolean
-  canBePurchace Boolean
-  locations     Location[]
-  createdBy     Int?
-  createdAt     DateTime   @default(now())
-  updatedBy     Int?
-  updatedAt     DateTime?  @updatedAt
-  deleteAt      DateTime?  @default(now())
-  deleteBy      Int?
+  id                  Int                  @id @default(autoincrement())
+  active              Boolean              @default(true)
+  name                String               @unique @default("")
+  code                String               @unique @default("")
+  description         String               @default("")
+  barcode             String               @unique @db.VarChar(20)
+  price               Decimal              @db.Decimal(12, 2)
+  cost                Decimal              @db.Decimal(12, 2)
+  image               String
+  canBeSold           Boolean
+  canBePurchace       Boolean
+  locations           Location[]
+  wherehouseMovements WherehouseMovement[]
+  orderLines          OrderLine[]
+  createdBy           Int?
+  createdAt           DateTime             @default(now())
+  updatedBy           Int?
+  updatedAt           DateTime?            @updatedAt
+  deleteAt            DateTime?            @default(now())
+  deleteBy            Int?
 }
 
 model Location {
