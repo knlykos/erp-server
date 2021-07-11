@@ -39,4 +39,16 @@ export class SalesOrderController {
       throw new Error(error);
     }
   }
+
+  async update(id: number, saleOrder: Prisma.SaleOrderCreateInput) {
+    try {
+      const updatedSaleOrder = await prisma.saleOrder.update({
+        where: { id: id },
+        data: saleOrder,
+      });
+      return updatedSaleOrder;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

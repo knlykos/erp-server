@@ -7,9 +7,10 @@ model SaleOrder {
   id             Int         @id @default(autoincrement())
   orderReference String
   partnerId      Int
+  partner        Partner     @relation(fields: [partnerId], references: [id])
   orderDate      DateTime
   orderLines     OrderLine[]
-  note           String      @db.Text
+  note           String?     @db.Text
   userId         Int
 
 }
@@ -23,6 +24,7 @@ model OrderLine {
   sales           SaleOrder?     @relation(fields: [salesOrderId], references: [id])
   purchaseOrders  PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
   quantity        Decimal        @db.Decimal(12, 2)
+  tax             Decimal        @db.Decimal(12, 2)
 }
 
 model PurchaseOrder {
@@ -31,15 +33,16 @@ model PurchaseOrder {
 }
 
 model Partner {
-  id         Int    @id @default(autoincrement())
-  name       String @db.VarChar(150)
-  street     String @db.VarChar(250)
-  zip        String @db.VarChar(10)
-  phone      String @db.VarChar(20)
-  mobile     String @db.VarChar(20)
-  email      String @db.VarChar(50)
-  website    String @db.VarChar(150)
-  ShippingId Int
+  id         Int         @id @default(autoincrement())
+  name       String      @db.VarChar(150)
+  street     String      @db.VarChar(250)
+  zip        String      @db.VarChar(10)
+  phone      String      @db.VarChar(20)
+  mobile     String      @db.VarChar(20)
+  email      String      @db.VarChar(50)
+  website    String      @db.VarChar(150)
+  shippingId Int
+  saleOrder  SaleOrder[]
 }
 
 model State {
