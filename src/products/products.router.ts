@@ -92,4 +92,17 @@ productRouter.post(
   }
 );
 
+productRouter.get('/elastic-search-bulk', async(req: Request, res: Response, next: NextFunction) => {
+  try {
+    const productController = new ProductsController();
+    productController.fillAllElasticSearch()
+    
+  } catch (error) {
+    console.log(error);
+    res.status(501).send(error.message);
+
+    
+  }
+})
+
 module.exports = productRouter;
